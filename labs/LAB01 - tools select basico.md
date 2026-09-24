@@ -730,8 +730,13 @@ Escribe una consulta que calcule y devuelva una columna llamada `porcentaje_me_g
 
 Solución:
 ```sql
-
+select
+    round ((me_gusta * 1.0 / reproducciones) * 100, 1) as porcentaje_me_gusta
+from cancion
+limit 10;
 ```
+
+#notaLab1 Se recomienda multiplicar me_gusta · 1.0 dado que sqlite hace una division entera por defecto, resultando 0. Recordar que ROUND (X, Nº decimales).
 
 | porcentaje_me_gusta |
 | ------------------- |
@@ -797,8 +802,12 @@ Escribe una consulta que calcule y devuelva una columna llamada `que_donde` que 
 
 Solución:
 ```sql
-
+select distinct
+    genero || ' ' || pais as que_donde  
+from cancion
 ```
+
+#notaLab1  Importante el comillado simple pa señalar un espacio y || como operacion de concatenacion de strings 
 
 | que_donde           |
 | ------------------- |
