@@ -616,7 +616,13 @@ El operador `OR` de SQL es un operador ‘o inclusivo’: se ejecuta correctamen
 
 Solución:
 ```sql
-
+select
+	titulo,
+    idioma,
+	pais
+from cancion
+where (idioma = 'ES' or pais = 'España') 
+  and not (idioma = 'ES' and pais = 'España');
 ```
 
 | titulo           | idioma | pais           |
