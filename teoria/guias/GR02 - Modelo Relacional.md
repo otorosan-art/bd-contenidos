@@ -119,7 +119,7 @@ Las restricciones son **condiciones que deben cumplirse en todos los estados vá
 
 Nos centramos en las **explícitas**, que son cuatro. 👇
 
-### 2.2. Restricciones de dominio
+### 2.2. Restricciones de dominio #notaTeoriaT2
 
 Cada valor de una tupla debe ser **atómico** y **pertenecer al dominio de su atributo** (o ser NULL si el atributo lo permite).
 
@@ -133,7 +133,7 @@ sexo   CHAR(1)       NOT NULL CHECK (sexo IN ('M','F','O')),  -- enumerado
 sueldo NUMERIC(12,2) NOT NULL CHECK (sueldo > 0)              -- subrango
 ```
 
-### 2.3. Restricciones de clave
+### 2.3. Restricciones de clave #notaTeoriaT2 
 
 Esta jerarquía de conceptos es fundamental. De más general a más específico:
 
@@ -174,11 +174,11 @@ CREATE TABLE LOCALIZACIONES_DPTO (
 );
 ```
 
-### 2.4. Integridad de entidad
+### 2.4. Integridad de entidad #notaTeoriaT2 
 
 **==Ningún atributo== de la PK puede ser NULL** en ninguna tupla. Motivo: la PK identifica cada tupla; con NULL no podría hacerlo. Si la PK es compuesta, la prohibición afecta a *todos* sus atributos.
 
-### 2.5. Integridad referencial
+### 2.5. Integridad referencial #notaTeoriaT2 
 
 Es la única restricción **entre dos relaciones**: la **referenciante** $R_1$ (que contiene la **clave externa**, FK) y la **referenciada** $R_2$ (cuya PK es apuntada).
 
