@@ -176,7 +176,7 @@ CREATE TABLE LOCALIZACIONES_DPTO (
 
 ### 2.4. Integridad de entidad
 
-**Ningún atributo de la PK puede ser NULL** en ninguna tupla. Motivo: la PK identifica cada tupla; con NULL no podría hacerlo. Si la PK es compuesta, la prohibición afecta a *todos* sus atributos.
+**==Ningún atributo== de la PK puede ser NULL** en ninguna tupla. Motivo: la PK identifica cada tupla; con NULL no podría hacerlo. Si la PK es compuesta, la prohibición afecta a *todos* sus atributos.
 
 ### 2.5. Integridad referencial
 
