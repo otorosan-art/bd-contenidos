@@ -212,10 +212,10 @@ Tres operaciones: **INSERT**, **DELETE**, **UPDATE**. Ninguna debe dejar la BD e
 
 ### 3.1. ¿Qué puede violar cada operación?
 
-| Operación | Puede violar... |
-| --- | --- |
-| **INSERT** | **Todas**: dominio, clave, integridad de entidad e integridad referencial |
-| **DELETE** | **Solo integridad referencial** (si la tupla borrada estaba referenciada por otras) |
+| Operación  | Puede violar...                                                                                                                                                             |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **INSERT** | **Todas**: dominio, clave, integridad de entidad e integridad referencial                                                                                                   |
+| **DELETE** | **Solo integridad referencial** (si la tupla borrada estaba referenciada por otras)                                                                                         |
 | **UPDATE** | Depende del atributo: si tocas la **PK** → como borrar+insertar; si tocas una **FK** → integridad referencial; si tocas un atributo ordinario → dominio / NOT NULL / UNIQUE |
 
 **Ejemplo rápido (INSERT en EMPLEADO):**
