@@ -737,7 +737,7 @@ limit 10;
 ```
 
 #notaLab1 Se recomienda multiplicar me_gusta · 1.0 dado que sqlite hace una division entera por defecto, resultando 0. Recordar que ROUND (X, Nº decimales).
-
+	
 | porcentaje_me_gusta |
 | ------------------- |
 | 3.4                 |
