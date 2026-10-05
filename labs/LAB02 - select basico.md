@@ -660,9 +660,9 @@ from cancion;
 ```
 Salida:
 
-| mas_larga | mas_corta | ratio_raro         |
-| --------- | --------- | ------------------ |
-| 431       | 122       | 0.0376337567207215 | 
+| mas_larga | mas_corta | ratio_raro         |     |
+| --------- | --------- | ------------------ | --- |
+| 431       | 122       | 0.0376337567207215 |     |
 
 - `max`, `min`y `avg` son otras funciones de agregación en SQL
 - En realidad, esto no debería funcionar: no se puede calcular el máximo ni el promedio si algún valor es nulo.
@@ -748,11 +748,11 @@ group by idioma;
 ```
 Salida:
 
-| idioma | media_reproducciones |
-| ------ | -------------------- |
-|        | 137940833.333333     |
-| EN     | 691769319.148936     |
-| ES     | 347325444.444444     | 
+| idioma | media_reproducciones |     |
+| ------ | -------------------- | --- |
+|        | 137940833.333333     |     |
+| EN     | 691769319.148936     |     |
+| ES     | 347325444.444444     |     |
 
 - Coloca las filas en grupos según distintas combinaciones de valores en las columnas especificadas con `group by`
 - Luego realiza la agregación por separado para cada grupo
@@ -794,8 +794,10 @@ Escribe una consulta que muestre cada año de publicación (`anio`) distinto en 
 
 Solución:
 ```sql
-
-
+select anio, count(*) as canciones_mismo_anio
+from cancion
+group by anio
+order by anio;
 ```
 
 Resultado:
@@ -911,8 +913,11 @@ Escribe una consulta que cuente el número de canciones de cada una de las sigui
 
 Solución:
 ```sql
-
-
+select 
+  count(*) filter (where duracion < 200) as corta,
+  count(*) filter (where duracion >= 200 and duracion <= 300) as media,
+  count(*) filter (where duracion > 300) as larga
+from cancion;
 ```
 
 Resultado:
