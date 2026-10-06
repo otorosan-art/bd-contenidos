@@ -27,7 +27,10 @@ Escribe una consulta que utilice un filtro para calcular simultáneamente el nú
 
 Solución:
 ```sql
-
+select 
+	round (avg (reproducciones) filter (where reproducciones > 100000000), 2) as media_exitos,
+	round (avg (reproducciones) filter (where reproducciones < 1000000), 2) as media_minoritarias
+from cancion;
 ```
 
 Resultado:
@@ -172,6 +175,15 @@ Tabla resultado:
 1. Crea la  tabla `FAMILIAR`, según el esquema de relación siguiente:
 
 $FAMILIAR$(empleado, nombre, sexo, fechaNac, relación\*)
+```sql
+CREATE TABLE FAMILIAR (
+  empleado TEXT NOT NULL,
+  nombre TEXT NOT NULL,
+  sexo TEXT NOT NULL,
+  fechaNac TEXT NOT NULL, 
+  relacion TEXT NOT NULL
+  );
+```
 
 2. Inserta los datos de la siguiente tabla:
 
@@ -184,12 +196,23 @@ $FAMILIAR$(empleado, nombre, sexo, fechaNac, relación\*)
 | 123456789 | Miguel  | M    | 1988-01-04 | Hijo     |
 | 123456789 | Alice   | F    | 1988-12-30 | Hija     |
 | 123456789 | Elisa   | F    | 1967-05-05 | Esposa   |
-
+```sql
+insert into familiar (empleado, nombre, sexo, fechanac, relacion) values
+  (333445555, 'Alicia', 'F', '1986-04-06', 'Hija'),
+  (333445555, 'Teodoro', 'M', '1983-10-25', 'Hijo'),
+  (333445555, 'Luisa', 'F', '1958-05-03', 'Esposa'),
+  (987654321, 'Alfonso', 'M', '1942-02-28', 'Esposo'),
+  (123456789, 'Miguel', 'M', '1988-01-04', 'Hijo'),
+  (123456789, 'Alice', 'F', '1988-12-30', 'Hija'),
+  (123456789, 'Elisa', 'F', '1967-05-05', 'Esposa');
+```
 3. Escribe una consulta que devuelva todos los familiares hombre.
 
 Solución:
 ```sql
-
+select *
+from familiar
+where sexo = 'M'; 
 ```
 
 Tabla resultado:
@@ -247,7 +270,14 @@ Reescribe la definición de la tabla de `FAMILIAR` para agregar las siguientes r
 
 Solución
 ```sql
-
+drop table if exists familiar;
+CREATE TABLE familiar (
+  empleado TEXT NOT NULL,
+  nombre TEXT NOT NULL,
+  sexo TEXT NOT NULL CHECK (sexo IN ('M', 'F', 'O')),
+  fechaNac TEXT NOT NULL, 
+  relacion TEXT CHECK (relacion IN ('Hijo', 'Hija', 'Conyuge', 'Hermano', 'Hermana'))
+ ) STRICT;
 ```
 
 Para verificar tu respuesta, selecciona su definición de la tabla sqlite_schema mediante la siguiente consulta:
@@ -433,7 +463,20 @@ En caso de ser una sola columna, crea una restricción a nivel de columna.
 
 Solución:
 ```sql
+drop table if exists empleado;
 
+CREATE TABLE EMPLEADO (	
+	nombre TEXT NOT NULL,
+	apellido1 TEXT NOT NULL,
+	apellido2 TEXT,
+	dni TEXT PRIMARY KEY NOT NULL,
+	fechaNac TEXT NOT NULL,
+	direccion TEXT,
+	sexo TEXT NOT NULL, 
+	sueldo REAL NOT NULL,
+	supervisor TEXT,
+	dpto INTEGER NOT NULL
+) STRICT;
 ```
 
 Para verificar tu respuesta, selecciona su definición de la tabla sqlite_schema mediante la siguiente consulta:
@@ -704,7 +747,16 @@ Reescribe la definición de la tabla de `FAMILIAR` para agregar su clave primari
 
 Solución
 ```sql
-
+drop table if exists familiar;
+create table familiar (
+  empleado text not null,
+  nombre text not null,
+  sexo text not null check (sexo in ('m', 'f', 'o')),
+  fechanac text not null,
+  relacion text check (relacion in ('hijo', 'hija', 'conyuge', 'hermano', 'hermana')),
+  primary key (empleado, nombre),
+  foreign key (empleado) references empleado(dni) on update cascade on delete cascade
+) strict;
 ```
 
 Para verificar tu respuesta, selecciona su definición de la tabla sqlite_schema mediante la siguiente consulta:
@@ -718,9 +770,9 @@ from sqlite_schema where type='table' and Lower(name)='familiar';
 
 Tabla resultado:
 
-| name     | sql                                                                                                                                                                                                                                                                                                             | 
-| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| familiar | createtablefamiliar(empleadotextnotnull,nombretextnotnull,sexotextnotnullcheck(sexoin('m','f','o')),fechanactextnotnull,relaciontextcheck(relacionin('hijo','hija','conyuge','hermano','hermana')),primarykey(empleado,nombre),foreignkey(empleado)referencesempleado(dni)onupdatecascadeondeletecascade)strict |
+| name     | sql                                                                                                                                                                                                                                                                                                             |     |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| familiar | createtablefamiliar(empleadotextnotnull,nombretextnotnull,sexotextnotnullcheck(sexoin('m','f','o')),fechanactextnotnull,relaciontextcheck(relacionin('hijo','hija','conyuge','hermano','hermana')),primarykey(empleado,nombre),foreignkey(empleado)referencesempleado(dni)onupdatecascadeondeletecascade)strict |     |
 
 ---
 ## Tipos de asociaciones entre tablas
@@ -858,7 +910,18 @@ Elimina la columna `valoracion` de la tabla `UBICACION`  (anteriormente, `LOCALI
 
 Solución:
 ```sql
+CREATE TABLE IF NOT EXISTS LOCALIZACIONES_DPTO (
+    dpto INTEGER NOT NULL,
+    ubicacion TEXT NOT NULL,
+    PRIMARY KEY (dpto, ubicacion) -- PRIMARY KEY implica NOT NULL
+) STRICT;
 
+ALTER TABLE localizaciones_dpto
+ADD valoracion integer not null default 0 check (valoracion > -1 and valoracion <6);
+
+ALTER TABLE LOCALIZACIONES_DPTO rename to UBICACION;
+
+ALTER TABLE UBICACION drop column valoracion;
 ```
 
 Para verificar tu respuesta, selecciona su definición de la tabla sqlite_schema mediante la siguiente consulta:
