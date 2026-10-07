@@ -23,7 +23,12 @@ Escribe una consulta que devuelva el sueldo medio por departamento para departam
 
 Solución:
 ```sql
-
+select 	
+	dpto,
+	avg (sueldo) as sueldo_medio
+from empleado
+group by dpto
+having count (*) > 1;
 ```
 
 Resultado:
@@ -242,7 +247,12 @@ Escribe una consulta para obtener el nombre, apellido1 y fechaNac de los emplead
 
 Solución:
 ```sql
-
+select
+	nombre,
+	apellido1,
+	fechaNac
+from empleado
+where fechaNac between date('2025-01-01','-70 year') and date ('2025-01-01', '-60 year', '+1 year', '-1 day')
 ```
 
 Tabla resultado:
@@ -437,9 +447,9 @@ HAVING count(*)> 1;
 
 Tabla resultado:
 
-| dni       | 
-| --------- |
-| 333445555 |
+| dni       |     |
+| --------- | --- |
+| 333445555 |     |
 
 `INTERSECT` devuelve la **intersección de las tablas resultado de ambas consultas**.
 
@@ -519,7 +529,18 @@ Escribe una consulta que devuelva los empleados con más de un familiar que no s
 
 Solución:
 ```sql
+SELECT 
+	empleado 
+from FAMILIAR
+GROUP BY empleado
+HAVING count(*)> 1
 
+EXCEPT
+
+SELECT 
+	supervisor as dni 
+	FROM EMPLEADO 
+	WHERE supervisor IS NOT NULL;
 ```
 
 Tabla resultado:
@@ -649,7 +670,23 @@ Escribe una consulta que devuelva el dni de los empleados que no tienen familiar
 
 Solución:
 ```sql
+SELECT 
+	dni
+FROM empleado
 
+EXCEPT 
+
+SELECT 
+	empleado 
+FROM familiar
+
+UNION 
+
+SELECT supervisor as dni
+FROM EMPLEADO
+WHERE supervisor IS NOT NULL
+GROUP BY supervisor
+HAVING COUNT (*) > 2; 
 
 ```
 
@@ -770,7 +807,20 @@ Escribe una consulta que devuelva los proyectos del departamento con mayor núme
 
 Solución:
 ```sql
-
+WITH max_empleados_dpto as (
+  select
+  	dpto
+  from empleado
+  group by dpto 
+  order by count(*) desc
+  limit 1
+ )
+ select 
+ 	p.nombre,
+	p.ubicacion,
+	p.dpto
+from proyecto p, max_empleados_dpto m 
+where p.dpto = m.dpto; 
 ```
 
 Tabla resultado:
