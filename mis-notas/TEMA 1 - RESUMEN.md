@@ -1,0 +1,1 @@
+Resumenes de gemini/claude y señalizacion de los aspectos mas importantes 
