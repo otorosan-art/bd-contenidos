@@ -16,20 +16,20 @@ Tres ideas clave:
 
 ### Mapa de operaciones
 
-| Grupo | Operación | Símbolo | En SQL (esencia) |
-|---|---|---|---|
-| **Unarias** | Selección | σ (sigma) | `WHERE` |
-| | Proyección | π (pi) | `SELECT DISTINCT` |
-| | Renombrado | ρ (rho) | `AS` / alias |
-| **Teoría de conjuntos** | Unión | ∪ | `UNION` |
-| | Intersección | ∩ | `INTERSECT` |
-| | Diferencia | − | `EXCEPT` |
-| | Producto cartesiano | × | `CROSS JOIN` |
-| **Binarias** | Concatenación (join) | ⋈ | `INNER JOIN` |
-| | Concatenación externa | ⟕ ⟖ ⟗ | `LEFT/RIGHT/FULL OUTER JOIN` |
-| | División | ÷ | (no directa; subconsultas) |
-| **Adicionales** | Agrupamiento | γ (gamma) | `GROUP BY` + agregadas |
-| | Ordenación | τ (tau) | `ORDER BY` |
+| Grupo                   | Operación             | Símbolo   | En SQL (esencia)             |
+| ----------------------- | --------------------- | --------- | ---------------------------- |
+| **Unarias**             | Selección             | σ (sigma) | `WHERE`                      |
+|                         | Proyección            | π (pi)    | `SELECT DISTINCT`            |
+|                         | Renombrado            | ρ (rho)   | `AS` / alias                 |
+| **Teoría de conjuntos** | Unión                 | ∪         | `UNION`                      |
+|                         | Intersección          | ∩         | `INTERSECT`                  |
+|                         | Diferencia            | −         | `EXCEPT`                     |
+|                         | Producto cartesiano   | ×         | `CROSS JOIN`                 |
+| **Binarias**            | Concatenación (join)  | ⋈         | `INNER JOIN`                 |
+|                         | Concatenación externa | ⟕ ⟖ ⟗     | `LEFT/RIGHT/FULL OUTER JOIN` |
+|                         | División              | ÷         | (no directa; subconsultas)   |
+| **Adicionales**         | Agrupamiento          | γ (gamma) | `GROUP BY` + agregadas       |
+|                         | Ordenación            | τ (tau)   | `ORDER BY`                   |
 
 ---
 
