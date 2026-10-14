@@ -21,7 +21,12 @@ Escribe una consulta para obtener el nombre del departamento, su director, su fe
 
 Solución:
 ```sql
-
+select 
+	nombre,
+	director,
+	fechaIngresoDirector as fecha,
+	max(strftime("%m", fechaIngresoDirector)) as mes
+from departamento
 ```
 
 Tabla resultado:
@@ -170,7 +175,13 @@ Tabla resultado:
 Escribe una consulta que devuelva el nombre de cada proyecto (nombre_proyecto) y el total de horas trabajadas en cada uno (total_horas_dedicadas), ordena los resultados por las horas trabajabas empezando por el de mayor horas. 
 
 ```sql
-
+select 
+	P.nombre as nombre_proyecto,
+	sum (T.horas) as total_horas_dedicadas
+from Proyecto P
+	INNER JOIN Trabaja_En T ON P.numero = T.proyecto
+group by P.nombre
+order by total_horas_dedicadas desc
 ```
 
 Tabla resultado:
@@ -260,7 +271,15 @@ Escribe una consulta que devuelva el nombre (nombre_empleado) y apellido1 de emp
 Solución:
 
 ```sql
-
+select 
+	E.nombre as nombre_empleado,
+	E.apellido1,
+	P.nombre as nombre_proyecto,
+	P.ubicacion
+from Proyecto P	
+	INNER JOIN Trabaja_En T ON (P.numero = T.proyecto)
+	INNER JOIN Empleado E ON (E.dni = T.empleado)
+order by nombre_empleado asc
 ```
 
 Tabla resultado:
@@ -320,7 +339,14 @@ Tabla resultado:
 Escribe una consulta que devuelva los empleados que ganan entre 2000 y 10000 euros menos que su supervisor directo. Las columnas resultado deben ser: nombre_empleado, sueldo_empleado, nombre_supervisor y sueldo_supervisor.
 
 ```sql
-
+select 
+	E.nombre as nombre_empleado,
+	E.sueldo as sueldo_empleado,
+	S.nombre as nombre_supervisor,
+	S.sueldo as sueldo_supervisor
+from Empleado S
+	INNER JOIN Empleado E ON (S.dni = E.supervisor)
+where E.sueldo between (S.sueldo - 10000) and (S.sueldo - 2000)
 ```
 
 Tabla resultado:
