@@ -32,7 +32,20 @@ La dirección de la empresa necesita un informe completo sobre la situación de 
 
 Solución:
 ```sql
-
+select
+  d.nombre as nombre_departamento,
+  dir.nombre || ' ' || dir.apellido1 as nombre_director,
+  count(distinct e.dni) as num_empleados,
+  count(distinct p.numero) as num_proyectos
+from departamento d
+left join empleado dir on d.director = dir.dni
+left join empleado e on d.numero = e.dpto and e.dni != d.director
+left join proyecto p on d.numero = p.dpto
+group by
+  d.nombre,
+  dir.nombre,
+  dir.apellido1
+order by num_empleados desc;
 ```
 
 Tabla resultado:
@@ -176,7 +189,13 @@ Escribe una consulta que muestre los nombres de los departamentos cuyo sueldo me
 
 Solución:
 ```sql
-
+select 
+  d.nombre, 
+  avg(e.sueldo) as sueldoMedio
+from departamento d
+join empleado e on d.numero = e.dpto
+group by d.nombre
+having avg(e.sueldo) > (select avg(sueldo) from empleado);
 ```
 
 Tabla resultado:
@@ -291,7 +310,14 @@ Escribe una consulta que liste el nombre y apellido de los empleados que trabaja
 
 Solución:
 ```sql
-
+select distinct
+  e.nombre,
+  e.apellido1
+from empleado e
+join trabaja_en t on e.dni = t.empleado
+join proyecto p on t.proyecto = p.numero
+where p.ubicacion = 'Madrid'
+order by e.apellido1, e.nombre;
 ```
 
 Tabla resultado:
@@ -431,7 +457,12 @@ Escribe una consulta que liste el el nombre y apellido de cada empleado junto co
 
 Solución:
 ```sql
-
+select 
+  e.nombre,
+  e.apellido1,
+  e.sueldo - (select avg(sueldo) from empleado e2 where e2.dpto = e.dpto) as diferenciaSueldoMedio
+from empleado e
+order by diferenciaSueldoMedio desc;
 ```
 
 Tabla resultado:
@@ -518,7 +549,14 @@ Escribe una consulta que liste el nombre de los proyectos donde trabaja al menos
 
 Solución:
 ```sql
-
+select distinct 
+  p.nombre
+from proyecto p
+join trabaja_en t on p.numero = t.proyecto
+join empleado e on t.empleado = e.dni
+join departamento d on e.dpto = d.numero
+where d.nombre = 'Investigación'
+order by p.nombre;
 ```
 
 Tabla resultado:
@@ -607,6 +645,21 @@ SELECT nombre, apellido1, sueldo FROM EMPLEADO;
 
 Solución:
 ```sql
+update empleado
+set sueldo = sueldo * 1.20
+where dni in (
+  select empleado
+  from trabaja_en
+  group by empleado
+  having sum(horas) > (
+    select avg(total_horas)
+    from (
+      select sum(horas) as total_horas
+      from trabaja_en
+      group by empleado
+    )
+  )
+);
 
 ```
 
@@ -738,8 +791,28 @@ Escribe una consulta que devuelva el `dni` de los empleados que no tienen ningú
 
 Solución:
 ```sql
+-- OPCION A --
+select dni
+from empleado
+where dni not in (
+  select empleado
+  from familiar
+)
+order by dni;
 
+-- OPCION B --
+select e.dni
+from empleado e
+where not exists (
+  select 1
+  from familiar f
+  where f.empleado = e.dni
+)
+order by e.dni;
 ```
+- **¿Ha hecho falta sanear los NULL en la versión (a)?** No, no ha hecho falta.
+
+- **¿Por qué?** Porque en el esquema de tu base de datos que definiste en los ejercicios pasados, la columna `empleado` dentro de la tabla `familiar` se creó con la restricción obligatoria `not null`. El operador `not in` es vulnerable a la lógica trivaluada de SQL: si la subconsulta le devolviera un solo valor `NULL`, la condición de exclusión completa colapsaría y no devolvería ninguna fila. Como la propia estructura de la tabla impide que existan familiares huérfanos de empleado, te ahorras tener que añadir el filtro preventivo `where empleado is not null` dentro de la subconsulta.
 
 Tabla resultado:
 
@@ -796,7 +869,20 @@ WHERE P.ubicacion = 'Madrid';
 
 Solución:
 ```sql
-
+select distinct
+  nombre,
+  apellido1
+from empleado
+where dni in (
+  select empleado
+  from trabaja_en
+  where proyecto in (
+    select numero
+    from proyecto
+    where ubicacion = 'Madrid'
+  )
+)
+order by nombre;
 ```
 
 Tabla resultado:
